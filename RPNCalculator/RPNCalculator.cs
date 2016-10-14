@@ -23,26 +23,9 @@ namespace RPNCalculator
             return ApplyOperation(operation);
         }
 
-        private int ApplyOperation(Operation operation)
+        private static int ApplyOperation(Operation operation)
         {
-            int result;
-            if (operation.Operator == '+')
-            {
-                result = Add(operation.Operands);
-            }
-            else if (operation.Operator == '-')
-            {
-                result = Minus(operation.Operands);
-            }
-            else if (operation.Operator == '*')
-            {
-                result = Multiply(operation.Operands);
-            }
-            else
-            {
-                result = Divde(operation.Operands);
-            }
-            return result;
+            return operation.GetOperationResult();
         }
 
         private static string ParseCommand(string command, out Operation operation)
@@ -68,26 +51,6 @@ namespace RPNCalculator
             }
 
             return string.Join(" ", operationMembers, 3, operationMembers.Length-3);
-        }
-
-        private static int Add(Operands operands)
-        {
-            return operands.FirstOperand + operands.SecondOperand;
-        }
-
-        public static int Minus(Operands operands)
-        {
-            return operands.FirstOperand - operands.SecondOperand;
-        }
-
-        public static int Multiply(Operands operands)
-        {
-            return operands.FirstOperand * operands.SecondOperand;
-        }
-
-        private static int Divde(Operands operands)
-        {
-            return operands.FirstOperand / operands.SecondOperand;
         }
     }
 }
