@@ -6,51 +6,38 @@ namespace RPNCalculator
     {
         public int Compute(string command)
         {
-            int result;
-            if (int.TryParse(command, out result))
+            var elements = command.Split(' ');
+
+            if (elements.Length == 1)
             {
-                return result;
+                return int.Parse(elements[0]);
             }
 
-            Operation operation;
-            var remainingCommand = ParseCommand(command, out operation);
 
-            while (remainingCommand.Length > 0)
-            {
-                remainingCommand = ParseCommand($"{ApplyOperation(operation)} {remainingCommand}", out operation);
-            }
+            var operand1 = int.Parse(elements[0]);
+            var operand2 = int.Parse(elements[1]);
+            var @operator = elements[2];
 
-            return ApplyOperation(operation);
+            return ApplyOperator(operand1, operand2, @operator);
         }
 
-        private static int ApplyOperation(Operation operation)
+        private static int ApplyOperator(int operand1, int operand2, string @operator)
         {
-            return operation.GetOperationResult();
-        }
-
-        private static string ParseCommand(string command, out Operation operation)
-        {
-            var operationMembers = command.Split(' ');
-            
-            var firstOperand = int.Parse(operationMembers[0]);
-            var secondOperand = int.Parse(operationMembers[1]);
-
-            operation = new Operation
+            switch (@operator)
             {
-                Operands = new Operands
-                {
-                    FirstOperand = firstOperand,
-                    SecondOperand = secondOperand,
-                },
-                Operator = Convert.ToChar(operationMembers[2])
-            };
-
-            if (operation.Operands.SecondOperand == 0 && operation.Operator == '/')
-            {
-                throw new ArgumentException();
+                case "+":
+                    return operand1 + operand2;
+                case "*":
+                    return operand1 * operand2;
+                case "/":
+                    if (operand2 == 0)
+                    {
+                        throw new ArgumentException();
+                    }
+                    return operand1 / operand2;
+                default:
+                    return operand1 - operand2;
             }
-
-            return string.Join(" ", operationMembers, 3, operationMembers.Length-3);
         }
     }
 }
