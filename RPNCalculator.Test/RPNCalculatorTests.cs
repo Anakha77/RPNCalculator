@@ -160,7 +160,6 @@ namespace RPNCalculator.Tests
             //Assert
             Assert.AreEqual(expected, actual);
         }
-/*
         [Test]
         public void Should_Substract_And_Divide_When_5_Minus_1_Divided_By_4()
         {
@@ -174,6 +173,19 @@ namespace RPNCalculator.Tests
             //Assert
             Assert.AreEqual(expected, actual);
         }
-*/
+
+        [Test]
+        public void Should_Combine_Nested_Computations()
+        {
+            //Arrange
+            var rpnCalculator = new RpnCalculator();
+            const int expected = 14;
+
+            //Act
+            var actual = rpnCalculator.Compute("5 1 2 + 4 * + 3 -");
+
+            //Assert
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

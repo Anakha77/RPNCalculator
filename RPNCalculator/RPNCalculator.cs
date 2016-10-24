@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace RPNCalculator
 {
@@ -6,19 +7,28 @@ namespace RPNCalculator
     {
         public int Compute(string command)
         {
-            var elements = command.Split(' ');
+            var listElements = command.Split(' ').ToList();
 
-            if (elements.Length == 1)
+            for (var i = 0; i < listElements.Count; i++)
             {
-                return int.Parse(elements[0]);
+                if (!IsOoperator(listElements[i])) continue;
+
+                var operand1 = int.Parse(listElements[i - 2]);
+                var operand2 = int.Parse(listElements[i - 1]);
+                var @operator = listElements[i];
+
+                listElements.RemoveRange(i - 2, 3);
+                listElements.Insert(i - 2, ApplyOperator(operand1, operand2, @operator).ToString());
+                i = i - 2;
             }
 
+            return int.Parse(listElements[0]);
+        }
 
-            var operand1 = int.Parse(elements[0]);
-            var operand2 = int.Parse(elements[1]);
-            var @operator = elements[2];
-
-            return ApplyOperator(operand1, operand2, @operator);
+        private static bool IsOoperator(string element)
+        {
+            var operators = new[] {"+", "-", "*", "/"};
+            return operators.Any(o => o == element);
         }
 
         private static int ApplyOperator(int operand1, int operand2, string @operator)
